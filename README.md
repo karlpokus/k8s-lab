@@ -10,6 +10,9 @@ A repo where I keep all configs for a k8s cluster playground.
 - cni flannel https://github.com/coreos/flannel
 - k8s 1.18 (kubelet, kubeadm, kubectl)
 
+# dummy app
+I'll use a dummy blogging app to test things. It'll be as simple as possible. See app/README.md
+
 # todos
 - [ ] verify cluster integrity https://github.com/vmware-tanzu/sonobuoy
 - [ ] terraform
@@ -17,7 +20,7 @@ A repo where I keep all configs for a k8s cluster playground.
 - [ ] traefik
 - [ ] iptables
 - [ ] namespaces
-- [ ] add worker node
+- [ ] add worker node post setup
 - [ ] logging
 - [ ] sysdig cloud
 - [ ] fault tolerance
@@ -30,6 +33,8 @@ A repo where I keep all configs for a k8s cluster playground.
 - [ ] rolling updates
 - [ ] synthetic traffic
 - [ ] run custom registry https://docs.docker.com/registry/deploying/
+- [ ] remote kubectl
+- [ ] k8s events
 
 # license
 MIT

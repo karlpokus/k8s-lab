@@ -1,0 +1,17 @@
+version: '3'
+services:
+  gw:
+    build: src/gw
+    container_name: gw
+    ports:
+      - '9050:9050'
+  user:
+    build: src/user
+    container_name: user
+    ports:
+      - '9051:9051'
+  blog:
+    build: src/blog
+    container_name: blog
+    ports:
+      - '9052:9052'
