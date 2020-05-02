@@ -28,6 +28,6 @@ spec:
     spec:
       containers:
       - name: blog
-        image: pokus2000/blog:0.1.0
+        image: pokus2000/blog:0.2.0
         ports:
         - containerPort: 9052

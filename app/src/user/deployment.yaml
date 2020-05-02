@@ -28,6 +28,6 @@ spec:
     spec:
       containers:
       - name: user
-        image: pokus2000/user:0.1.0
+        image: pokus2000/user:0.2.0
         ports:
         - containerPort: 9051

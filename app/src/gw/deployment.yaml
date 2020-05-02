@@ -29,6 +29,6 @@ spec:
     spec:
       containers:
       - name: gw
-        image: pokus2000/gw:0.1.0
+        image: pokus2000/gw:0.2.0
         ports:
         - containerPort: 9050
