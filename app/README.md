@@ -4,8 +4,9 @@
 - blog: r/w the blog db
 
 # todos
-- [x] api /posts
-- [x] api /post/:title
+- [x] GET /posts
+- [x] GET /post/:title
+- [x] POST /post
 - [ ] api tests
 - [ ] run test on merge
 - [ ] readiness and liveness probes
@@ -27,7 +28,6 @@ known bugs
 - go build errors end up in docker process list
 
 # deploy
-docker build <dockerfile> -t <tag> (or re-tag latest)
+docker tag <latest> <tag>
 docker push <img>
-scp <app>/deployment.yaml to host
-kubectl apply -f <app>/deployment.yaml
+kubectl apply -f app/src -R && kubectl get pods -w -o wide
