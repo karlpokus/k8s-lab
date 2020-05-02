@@ -20,6 +20,20 @@ func remoteCall(req *http.Request) (*http.Response, error) {
 	return client.Do(req.WithContext(ctx))
 }
 
+func reply(w http.ResponseWriter, res *http.Response, err error, url string) {
+	if err != nil {
+		log.Printf("remote call to %s failed: %s", url, err)
+		http.Error(w, "server err", 500)
+		return
+	}
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		http.Error(w, res.Status, res.StatusCode)
+		return
+	}
+	io.Copy(w, res.Body)
+}
+
 func auth(next http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user, pwd, ok := r.BasicAuth()
@@ -50,9 +64,9 @@ func auth(next http.Handler) http.HandlerFunc {
 	}
 }
 
-func blogs() http.HandlerFunc {
+func getPosts() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		url := "http://blog:9052/blogs"
+		url := "http://blog:9052/posts"
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
 			log.Printf("request construction of %s failed: %s", url, err)
@@ -60,17 +74,27 @@ func blogs() http.HandlerFunc {
 			return
 		}
 		res, err := remoteCall(req)
+		reply(w, res, err, url)
+	}
+}
+
+func getPost() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		url := "http://blog:9052/post/"
+		title := httprouter.ParamsFromContext(r.Context()).ByName("title")
+		if title == "" {
+			http.Error(w, "missing title arg", 400)
+			return
+		}
+		url = url + title
+		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
-			log.Printf("remote call to %s failed: %s", url, err)
-			http.Error(w, "server err", 500)
+			log.Printf("request construction of %s failed: %s", url, err)
+			http.Error(w, "server error", 500)
 			return
 		}
-		defer res.Body.Close()
-		if res.StatusCode != 200 {
-			http.Error(w, res.Status, res.StatusCode)
-			return
-		}
-		io.Copy(w, res.Body)
+		res, err := remoteCall(req)
+		reply(w, res, err, url)
 	}
 }
 
@@ -83,7 +107,7 @@ func ping() http.HandlerFunc {
 func main() {
 	router := httprouter.New()
 	router.Handler("GET", "/ping", ping())
-	router.Handler("GET", "/blogs", auth(blogs()))
-	//router.Handler("GET", "/blog/:title", auth())
+	router.Handler("GET", "/posts", auth(getPosts()))
+	router.Handler("GET", "/post/:title", auth(getPost()))
 	log.Fatal(http.ListenAndServe("0.0.0.0:9050", router))
 }

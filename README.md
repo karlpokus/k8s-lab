@@ -24,7 +24,6 @@ I'll use a dummy blogging app to test things. It'll be as simple as possible. Se
 - [ ] logging
 - [ ] sysdig cloud
 - [ ] fault tolerance
-- [ ] readiness and liveness probes
 - [ ] bump k8s version
 - [ ] persistant storage
 - [ ] ci/cd
@@ -33,7 +32,7 @@ I'll use a dummy blogging app to test things. It'll be as simple as possible. Se
 - [ ] rolling updates
 - [ ] synthetic traffic
 - [ ] run custom registry https://docs.docker.com/registry/deploying/
-- [ ] remote kubectl
+- [x] remote kubectl
 - [ ] k8s events
 
 # license
