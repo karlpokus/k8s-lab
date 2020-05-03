@@ -11,6 +11,14 @@ spec:
   selector:
     app: gw
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gw
+  namespace: default
+data:
+  LOG_REQUESTS: no
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,3 +40,6 @@ spec:
         image: pokus2000/gw:0.2.0
         ports:
         - containerPort: 9050
+        envFrom:
+        - configMapRef:
+            name: gw

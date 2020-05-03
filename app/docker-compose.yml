@@ -3,6 +3,7 @@ services:
   gw:
     build: src/gw
     container_name: gw
+    env_file: src/gw/env
     ports:
       - '9050:9050'
   user:

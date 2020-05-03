@@ -10,21 +10,25 @@
 - [ ] api tests
 - [ ] run test on merge
 - [ ] readiness and liveness probes
+- [ ] add binary version
+- [ ] add graceful exits
+- [x] add request logs toggle from env
+- [ ] config
 
 # usage
 We'll use docker-compose to orchestrate containers for local development and we'll keep images simple i.e huge - not optimized, to cut down on rebuild time.
 
 ```bash
+# run all
+$ docker-compose up &
 # rebuild image and restart container on src file change
 $ watchexec -w src/gw "docker-compose up -d --build gw" & \
- watchexec -w src/user "docker-compose up -d --build user" & \
- watchexec -w src/blog "docker-compose up -d --build blog" &
-# run all
-$ docker-compose up [--build]
+watchexec -w src/user "docker-compose up -d --build user" & \
+watchexec -w src/blog "docker-compose up -d --build blog" &
 ```
 
 known bugs
-- docker-compose services change name between restarts
+- docker-compose service names change colour between restarts
 - go build errors end up in docker process list
 
 # deploy

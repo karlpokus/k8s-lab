@@ -6,6 +6,7 @@ import (
 	"context"
 	"time"
 	"io"
+	"os"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -125,11 +126,20 @@ func addPost() http.HandlerFunc {
 	}
 }
 
+func logRequest(doLog string, next http.Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if doLog == "yes" {
+			log.Println(r.Method, r.URL.Path)
+		}
+		next.ServeHTTP(w, r)
+	}
+}
+
 func main() {
 	router := httprouter.New()
 	router.Handler("GET", "/ping", ping())
 	router.Handler("GET", "/posts", auth(getPosts()))
 	router.Handler("GET", "/post/:title", auth(getPost()))
 	router.Handler("POST", "/post", auth(addPost()))
-	log.Fatal(http.ListenAndServe("0.0.0.0:9050", router))
+	log.Fatal(http.ListenAndServe("0.0.0.0:9050", logRequest(os.Getenv("LOG_REQUESTS"), router)))
 }
