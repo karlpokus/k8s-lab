@@ -30,6 +30,7 @@ I'll use a dummy blogging app to test things. It'll be as simple as possible. Se
 - [ ] tracing
 - [ ] metrics (k8s objects, host, app, db, 4 goldens sigs)
 - [x] rolling updates
+- [ ] rollback
 - [ ] synthetic traffic
 - [ ] run custom registry https://docs.docker.com/registry/deploying/
 - [x] remote kubectl
