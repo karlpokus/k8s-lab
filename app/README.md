@@ -35,3 +35,4 @@ known bugs
 docker tag <latest> <tag>
 docker push <img>
 kubectl apply -f app/src -R && kubectl get pods -w -o wide
+note: if only configmap change: kubectl rollout restart deploy/<thing>

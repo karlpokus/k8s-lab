@@ -17,7 +17,7 @@ metadata:
   name: gw
   namespace: default
 data:
-  LOG_REQUESTS: no
+  LOG_REQUESTS: "yes"
 ---
 apiVersion: apps/v1
 kind: Deployment
