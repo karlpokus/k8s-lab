@@ -35,6 +35,8 @@ I'll use a dummy blogging app to test things. It'll be as simple as possible. Se
 - [ ] run custom registry https://docs.docker.com/registry/deploying/
 - [x] remote kubectl
 - [ ] k8s events
+- [ ] drain a node https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/
+- [ ] pod Disruption Budget https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 
 # license
 MIT
