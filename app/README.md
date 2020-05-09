@@ -13,14 +13,14 @@
 - [ ] add binary version
 - [ ] add graceful exits
 - [x] add request logs toggle from env
-- [ ] config
+- [ ] create configmap from file
 
 # usage
 We'll use docker-compose to orchestrate containers for local development and we'll keep images simple i.e huge - not optimized, to cut down on rebuild time.
 
 ```bash
 # run all
-$ docker-compose up &
+$ docker-compose -f mongo.yml -f apps.yml up &
 # rebuild image and restart container on src file change
 $ watchexec -w src/gw "docker-compose up -d --build gw" & \
 watchexec -w src/user "docker-compose up -d --build user" & \
