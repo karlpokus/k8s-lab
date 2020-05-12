@@ -16,7 +16,8 @@ import (
 )
 
 type post struct {
-	Title, Body string
+	Title string `json:"title,omitempty"`
+	Body string `json:"body,omitempty"`
 }
 
 /*type store interface {
