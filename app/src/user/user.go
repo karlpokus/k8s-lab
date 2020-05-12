@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/julienschmidt/httprouter"
+	"go.elastic.co/apm/module/apmhttprouter"
 )
 
 func getUser() http.HandlerFunc {
@@ -29,7 +29,7 @@ func ping() http.HandlerFunc {
 }
 
 func main() {
-	router := httprouter.New()
+	router := apmhttprouter.New() // wraps httprouter
 	router.Handler("GET", "/ping", ping())
 	router.Handler("GET", "/user", getUser())
 	log.Fatal(http.ListenAndServe("0.0.0.0:9051", router))

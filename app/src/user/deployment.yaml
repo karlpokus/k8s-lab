@@ -28,6 +28,9 @@ spec:
     spec:
       containers:
       - name: user
-        image: pokus2000/user:0.2.0
+        image: pokus2000/user:0.3.0
         ports:
         - containerPort: 9051
+        envFrom:
+        - configMapRef:
+            name: apm

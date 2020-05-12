@@ -3,16 +3,21 @@ services:
   gw:
     build: src/gw
     container_name: gw
-    env_file: src/gw/env
     ports:
       - '9050:9050'
+    env_file: ./.env
+    environment:
+      - LOG_REQUESTS=yes
+      - ELASTIC_APM_LOG_LEVEL=debug
   user:
     build: src/user
     container_name: user
     ports:
       - '9051:9051'
+    env_file: ./.env
   blog:
     build: src/blog
     container_name: blog
     ports:
       - '9052:9052'
+    env_file: ./.env

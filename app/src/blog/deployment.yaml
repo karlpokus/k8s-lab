@@ -28,6 +28,9 @@ spec:
     spec:
       containers:
       - name: blog
-        image: pokus2000/blog:0.3.0
+        image: pokus2000/blog:0.4.0
         ports:
         - containerPort: 9052
+        envFrom:
+        - configMapRef:
+            name: apm

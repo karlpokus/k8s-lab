@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"context"
@@ -8,12 +9,15 @@ import (
 	"io"
 	"os"
 
+	"go.elastic.co/apm"
+	"go.elastic.co/apm/module/apmhttp"
+	"go.elastic.co/apm/module/apmhttprouter"
 	"github.com/julienschmidt/httprouter"
 )
 
-var client = http.Client{
+var client = apmhttp.WrapClient(&http.Client{
 	Timeout: 3 * time.Second, // tcp ttl
-}
+})
 
 type post struct {
 	Title, Body string
@@ -25,19 +29,15 @@ func ping() http.HandlerFunc {
 	}
 }
 
-func remoteCall(req *http.Request) (*http.Response, error) {
-	if req.Body != nil {
-		defer req.Body.Close()
-	}
-	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second) // http ttl
+func call(req *http.Request, parent context.Context) (*http.Response, error) {
+	ctx, cancel := context.WithTimeout(parent, 3*time.Second) // http ttl
 	defer cancel()
 	return client.Do(req.WithContext(ctx))
 }
 
-func reply(w http.ResponseWriter, res *http.Response, err error, url string) {
+func reply(w http.ResponseWriter, r *http.Request, res *http.Response, err error, url string) {
 	if err != nil {
-		log.Printf("remote call to %s failed: %s", url, err)
-		http.Error(w, "server err", 500)
+		errPipe(w, r, fmt.Errorf("remote call to %s failed: %s", url, err))
 		return
 	}
 	defer res.Body.Close()
@@ -58,15 +58,13 @@ func auth(next http.Handler) http.HandlerFunc {
 		url := "http://user:9051/user"
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
-			log.Printf("request construction of %s failed: %s", url, err)
-			http.Error(w, "server error", 500)
+			errPipe(w, r, fmt.Errorf("request construction of %s failed: %s", url, err))
 			return
 		}
 		req.SetBasicAuth(user, pwd)
-		res, err := remoteCall(req)
+		res, err := call(req, r.Context())
 		if err != nil {
-			log.Printf("remote call to %s failed: %s", url, err)
-			http.Error(w, "server err", 500)
+			errPipe(w, r, fmt.Errorf("remote call to %s failed: %s", url, err))
 			return
 		}
 		defer res.Body.Close()
@@ -83,19 +81,18 @@ func getPosts() http.HandlerFunc {
 		url := "http://blog:9052/posts"
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
-			log.Printf("request construction of %s failed: %s", url, err)
-			http.Error(w, "server error", 500)
+			errPipe(w, r, fmt.Errorf("request construction of %s failed: %s", url, err))
 			return
 		}
-		res, err := remoteCall(req)
-		reply(w, res, err, url)
+		res, err := call(req, r.Context())
+		reply(w, r, res, err, url)
 	}
 }
 
 func getPost() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		url := "http://blog:9052/post/"
-		title := httprouter.ParamsFromContext(r.Context()).ByName("title")
+		title := httprouter.ParamsFromContext(r.Context()).ByName("title") // TODO: sanitize title
 		if title == "" {
 			http.Error(w, "missing title arg", 400)
 			return
@@ -103,12 +100,11 @@ func getPost() http.HandlerFunc {
 		url = url + title
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
-			log.Printf("request construction of %s failed: %s", url, err)
-			http.Error(w, "server error", 500)
+			errPipe(w, r, fmt.Errorf("request construction of %s failed: %s", url, err))
 			return
 		}
-		res, err := remoteCall(req)
-		reply(w, res, err, url)
+		res, err := call(req, r.Context())
+		reply(w, r, res, err, url)
 	}
 }
 
@@ -117,13 +113,18 @@ func addPost() http.HandlerFunc {
 		url := "http://blog:9052/post"
 		req, err := http.NewRequest("POST", url, r.Body)
 		if err != nil {
-			log.Printf("request construction of %s failed: %s", url, err)
-			http.Error(w, "server error", 500)
+			errPipe(w, r, fmt.Errorf("request construction of %s failed: %s", url, err))
 			return
 		}
-		res, err := remoteCall(req)
-		reply(w, res, err, url)
+		res, err := call(req, r.Context())
+		reply(w, r, res, err, url)
 	}
+}
+
+func errPipe(w http.ResponseWriter, r *http.Request, err error) {
+	log.Println(err)
+	apm.CaptureError(r.Context(), err).Send()
+	http.Error(w, "server err", 500)
 }
 
 func logRequest(doLog string, next http.Handler) http.HandlerFunc {
@@ -136,7 +137,7 @@ func logRequest(doLog string, next http.Handler) http.HandlerFunc {
 }
 
 func main() {
-	router := httprouter.New()
+	router := apmhttprouter.New() // wraps httprouter
 	router.Handler("GET", "/ping", ping())
 	router.Handler("GET", "/posts", auth(getPosts()))
 	router.Handler("GET", "/post/:title", auth(getPost()))
