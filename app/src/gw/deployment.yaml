@@ -25,7 +25,7 @@ metadata:
   labels:
     app: gw
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: gw
@@ -44,3 +44,9 @@ spec:
             name: gw
         - configMapRef:
             name: apm
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 9050
+          initialDelaySeconds: 2
+          periodSeconds: 10

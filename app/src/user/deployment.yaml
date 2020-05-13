@@ -34,3 +34,9 @@ spec:
         envFrom:
         - configMapRef:
             name: apm
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 9051
+          initialDelaySeconds: 2
+          periodSeconds: 10
