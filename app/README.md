@@ -11,13 +11,24 @@
 - [ ] run test on merge
 - [ ] readiness and liveness probes
 - [ ] add binary version
-- [ ] add graceful exits
+- [x] add graceful exits to gw
 - [x] add request logs toggle from env
 - [ ] create configmap from file
 - [x] elastic apm tracing
 - [ ] logging
 - [ ] 4 golden sigs
 - [ ] multi-stage docker builds
+- [ ] ingress
+
+# apm
+Can elastic apm provide 4 golden signals?
+
+- traffic: if ELASTIC_APM_TRANSACTION_SAMPLE_RATE <1 then we don't have all data
+- latency: for gw at least. service.name: gw, transaction.duration.us, transaction.name, processor.event: "transaction", http.response.status_code OR transaction.result. Mongo latency span.subtype:mongodb and span.duration.us
+- errors: 5xx/s
+- saturation (per service); cpu: system.process.cpu.total.norm.pct, mem: system.process.memory.rss.bytes
+
+Availability (not part of 4 sigs) could be calculated by (reqs - errors) / reqs
 
 # usage
 We'll use docker-compose to orchestrate containers for local development and we'll keep images simple i.e huge - not optimized, to cut down on rebuild time.
@@ -51,6 +62,6 @@ $ docker push <imgs>
 # deploy
 ```bash
 # update cluster
-$ kubectl apply -f app/src -R && kubectl get pods -w
+$ kubectl apply -f app/src -R && kubectl get pods -w | grep -i running
 # note: if only configmap change: kubectl rollout restart deploy/<thing>
 ```
