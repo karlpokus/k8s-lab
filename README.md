@@ -24,7 +24,7 @@ I'll use a dummy blogging app to test things. It'll be as simple as possible. Se
 - [ ] logging
 - [ ] sysdig cloud
 - [ ] fault tolerance
-- [ ] bump k8s version
+- [ ] bump k8s version i.e kubeadm upgrade
 - [ ] persistant storage
 - [ ] ci/cd
 - [ ] tracing
@@ -35,8 +35,9 @@ I'll use a dummy blogging app to test things. It'll be as simple as possible. Se
 - [ ] run custom registry https://docs.docker.com/registry/deploying/
 - [x] remote kubectl
 - [ ] k8s events
-- [ ] drain a node https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/
+- [ ] drain a node https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/ (cordon, drain, uncordon node)
 - [ ] pod Disruption Budget https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+- [ ] create dev role
 
 # license
 MIT
