@@ -7,15 +7,15 @@
 - [x] GET /posts
 - [x] GET /post/:title
 - [x] POST /post
-- [ ] api tests
+- [x] api tests
 - [ ] run test on merge
-- [ ] readiness and liveness probes
+- [x] probes
 - [ ] add binary version
 - [x] add graceful exits to gw
 - [x] add request logs toggle from env
 - [ ] create configmap from file
 - [x] elastic apm tracing
-- [ ] logging
+- [x] logging
 - [ ] 4 golden sigs
 - [ ] multi-stage docker builds
 - [ ] ingress
@@ -51,9 +51,9 @@ known bugs
 # build
 ```bash
 # tag
-$ docker tag app_gw:latest pokus2000/gw:0.3.0
-$ docker tag app_user:latest pokus2000/user:0.3.0
-$ docker tag app_blog:latest pokus2000/blog:0.4.0
+$ docker tag app_gw:latest pokus2000/gw:<version>
+$ docker tag app_user:latest pokus2000/user:<version>
+$ docker tag app_blog:latest pokus2000/blog:<version>
 # push
 $ docker push <imgs>
 # note: update image tag in deployment
