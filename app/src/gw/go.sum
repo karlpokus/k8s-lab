@@ -20,6 +20,8 @@ github.com/julienschmidt/httprouter v1.3.0 h1:U0609e9tgbseu3rBINet9P48AI/D3oJs4d
 github.com/julienschmidt/httprouter v1.3.0/go.mod h1:JR6WtHb+2LUe8TCKY3cZOxFyyO8IZAc4RVcycCCAKdM=
 github.com/karlpokus/routest/v2 v2.0.0 h1:nP1fePO/ramxHUG80PaM/q7ZgDVwEjKh4xQuhG5bHNM=
 github.com/karlpokus/routest/v2 v2.0.0/go.mod h1:gmYSDt1bDf/4SMG9GGTZDe65H/0MVPkvj7Fhw6neRUo=
+github.com/karlpokus/routest/v2 v2.1.0 h1:MyVujnMqvjfwEBFyR0tsJeiBVPsDR3Js2+PiFBJ8Li4=
+github.com/karlpokus/routest/v2 v2.1.0/go.mod h1:bC4txpBEJrJGwu9tprea/BK1E1pwZsdiAijWu9V52WA=
 github.com/karlpokus/srv v0.3.1/go.mod h1:/vf/MnAOC6iHrQbEWML0NqE8N6WtPB+kAgpoaUKr+Mk=
 github.com/karlpokus/srv v0.5.0 h1:qohiHYQovmx/U/4dsZ+mGabkqYiqS58FSp1uS9VSB5I=
 github.com/karlpokus/srv v0.5.0/go.mod h1:5LRmPHytuLsVRZo7aY1Ic1TIOKabAbt/M6lENdY1PZ4=
