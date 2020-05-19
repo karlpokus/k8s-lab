@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: logging
+  name: es
+spec:
+  clusterIP: None
+  ports:
+  - port: 9200
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: es
+  namespace: logging
+subsets:
+  - addresses:
+      - ip: 10.6.197.19
+    ports:
+      - port: 9200

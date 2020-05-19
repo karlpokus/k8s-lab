@@ -19,6 +19,11 @@
 - [ ] 4 golden sigs
 - [ ] multi-stage docker builds
 - [ ] ingress
+- [ ] set worker node allocatable (not 97% like default)
+- [ ] resource limits
+- [ ] set docker log delivery mode https://docs.docker.com/config/containers/logging/configure/#configure-the-delivery-mode-of-log-messages-from-container-to-log-driver
+- [x] let logger use headless service es
+- [ ] push dockerd error logs to es
 
 # apm
 Can elastic apm provide 4 golden signals?
